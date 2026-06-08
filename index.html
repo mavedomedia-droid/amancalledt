@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A Man Called Lagbaja — The Presidential Chronicle</title>
+  <meta name="description" content="Official news, policy recaps, milestone tracker, and fact-checks."/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* === LIGHT EDITORIAL THEME === */
+    :root {
+      --bg:#ffffff; --surface:#f8f7f4; --card-bg:#f0efeb; --border:#e2e0da;
+      --text-primary:#1a1a1a; --text-secondary:#4a4a4a; --text-muted:#7a7a7a;
+      --accent:#1a2a3a; --accent-light:#2d3f52; --accent-text:#ffffff;
+      --verdict-true-bg:#e6f4ea; --verdict-true-text:#1b5e20;
+      --verdict-misleading-bg:#fff3e0; --verdict-misleading-text:#e65100;
+      --verdict-false-bg:#fce4e4; --verdict-false-text:#b71c1c;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6}
+
+    nav{background:var(--bg);border-bottom:1px solid var(--border);padding:14px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .nav-logo{font-size:18px;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:0.03em}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-secondary);text-decoration:none;transition:color 0.2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--accent)}
+
+    .hero{padding:60px 48px 40px;border-bottom:1px solid var(--border);background:var(--surface)}
+    .hero-content{max-width:1100px}
+    .hero-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--text-muted);margin-bottom:10px}
+    .hero h1{font-size:clamp(40px,7vw,80px);font-weight:900;color:var(--accent);line-height:1;margin-bottom:14px}
+    .hero h1 .outline{-webkit-text-stroke:1.5px var(--accent);color:transparent}
+    .hero-sub{font-size:16px;color:var(--text-secondary);max-width:500px;font-weight:300}
+
+    .featured-section{padding:40px 48px;border-bottom:1px solid var(--border)}
+    .featured-card{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border-radius:6px;overflow:hidden;cursor:pointer;transition:box-shadow 0.2s}
+    .featured-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.04)}
+    .featured-img{width:100%;height:100%;object-fit:cover;min-height:260px;background:var(--card-bg)}
+    .featured-text{padding:32px;display:flex;flex-direction:column;justify-content:center}
+    .featured-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:10px}
+    .featured-title{font-size:28px;font-weight:900;color:var(--text-primary);line-height:1.1;margin-bottom:12px}
+    .featured-excerpt{font-size:14px;color:var(--text-secondary);font-weight:300;margin-bottom:16px}
+    .featured-meta{font-size:12px;color:var(--text-muted)}
+    .btn-accent{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-text);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;padding:10px 22px;border-radius:4px;text-decoration:none;border:none;cursor:pointer;transition:background 0.2s;margin-top:12px}
+    .btn-accent:hover{background:var(--accent-light)}
+
+    .posts-section{padding:50px 48px}
+    .posts-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+    .section-title{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--text-muted)}
+    .category-filters{display:flex;gap:8px;flex-wrap:wrap}
+    .cat-btn{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text-secondary);cursor:pointer;transition:all 0.2s}
+    .cat-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .cat-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    .search-row{margin-bottom:28px}
+    .search-input{width:100%;max-width:420px;font-family:'Figtree',sans-serif;font-size:14px;color:var(--text-primary);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px 16px;outline:none;transition:border-color 0.2s}
+    .search-input:focus{border-color:var(--accent)}
+    .search-input::placeholder{color:var(--text-muted)}
+
+    .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .post-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:box-shadow 0.2s,border-color 0.2s;display:flex;flex-direction:column}
+    .post-card:hover{box-shadow:0 2px 8px rgba(0,0,0,0.05);border-color:var(--accent-light)}
+    .pc-img{aspect-ratio:16/10;overflow:hidden;background:var(--card-bg)}
+    .pc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s}
+    .post-card:hover .pc-img img{transform:scale(1.03)}
+    .pc-body{padding:14px 16px 18px;flex:1;display:flex;flex-direction:column}
+    .pc-category{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .verdict-badge{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:10px}
+    .verdict-true{background:var(--verdict-true-bg);color:var(--verdict-true-text)}
+    .verdict-misleading{background:var(--verdict-misleading-bg);color:var(--verdict-misleading-text)}
+    .verdict-false{background:var(--verdict-false-bg);color:var(--verdict-false-text)}
+    .pc-title{font-size:17px;font-weight:900;color:var(--text-primary);line-height:1.2;margin-bottom:6px}
+    .pc-excerpt{font-size:12px;color:var(--text-secondary);font-weight:300;line-height:1.5;margin-bottom:10px}
+    /* mini progress bar on milestone cards */
+    .pc-bar-track{height:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:10px}
+    .pc-bar-fill{height:100%;background:var(--accent);border-radius:6px}
+    .pc-meta{font-size:11px;color:var(--text-muted);display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px;margin-top:auto}
+
+    /* Modal */
+    .modal-wrap{display:none;position:fixed;inset:0;z-index:9999;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);overflow-y:auto;padding:30px 16px}
+    .modal-wrap.open{display:block}
+    .modal{max-width:700px;margin:0 auto;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;animation:fadeIn 0.2s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .modal-close{position:fixed;top:20px;right:24px;z-index:10001;background:var(--bg);border:1px solid var(--border);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text-secondary);cursor:pointer;transition:0.2s}
+    .modal-close:hover{color:var(--accent);border-color:var(--accent)}
+    .modal-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--card-bg)}
+    .modal-body{padding:32px 40px 40px}
+    .modal-category{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:10px}
+    .modal-title{font-size:32px;font-weight:900;color:var(--text-primary);line-height:1.1;margin-bottom:16px}
+    .modal-meta{font-size:12px;color:var(--text-muted);margin-bottom:20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border);padding-bottom:16px;flex-wrap:wrap}
+    .modal-share-btn{background:none;border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:0.2s}
+    .modal-share-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .modal-share-btn.copied{border-color:#2e7d32;color:#2e7d32}
+    .modal-divider{height:1px;background:var(--border);margin:20px 0}
+    .modal-content p{margin-bottom:16px;font-size:15px;color:var(--text-secondary)}
+    .modal-content img{width:100%;border-radius:6px}
+
+    /* fact-check block */
+    .fact-block{background:var(--surface);border-left:3px solid var(--accent);padding:16px;margin-bottom:16px;border-radius:4px}
+    .fact-verdict-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .fact-verdict-icon{font-size:22px}
+    .fact-verdict-text{font-weight:700;font-size:16px}
+    .fact-source{font-size:12px;color:var(--text-muted)}
+
+    /* milestone block */
+    .ms-block{background:var(--surface);border:1px solid var(--border);padding:18px;margin-bottom:16px;border-radius:6px}
+    .ms-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:8px;flex-wrap:wrap;gap:6px}
+    .ms-row strong{color:var(--text-primary);font-weight:600}
+    .ms-bar-track{height:12px;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+    .ms-bar-fill{height:100%;background:var(--accent);border-radius:6px;transition:width 0.6s ease}
+    .ms-bar-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-top:6px}
+    .ms-bar-labels strong{color:var(--accent);font-weight:700}
+
+    .modal-tags{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap}
+    .tag{font-size:9px;font-weight:300;color:var(--text-muted);letter-spacing:0.08em}
+
+    footer{border-top:1px solid var(--border);padding:16px 48px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-muted)}
+    footer a{color:var(--text-muted);text-decoration:none;margin-left:16px}
+    footer a:hover{color:var(--accent)}
+
+    @media (max-width:768px){
+      nav{padding:14px 20px}
+      .hero{padding:40px 20px 30px}
+      .featured-section{padding:20px}
+      .featured-card{grid-template-columns:1fr}
+      .featured-text{padding:20px}
+      .posts-section{padding:30px 20px}
+      .posts-grid{grid-template-columns:1fr 1fr;gap:12px}
+      .modal-body{padding:20px 18px 30px}
+    }
+    @media (max-width:480px){.posts-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-wrap" id="postModal">
+  <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+  <div class="modal">
+    <img class="modal-img" id="mImg" src="" alt=""/>
+    <div class="modal-body">
+      <div class="modal-category" id="mCat"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <div class="modal-meta">
+        <span id="mMetaText"></span>
+        <span id="mReadText"></span>
+        <button class="modal-share-btn" id="mShare" onclick="handleShare()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share
+        </button>
+      </div>
+      <div id="factCheckBlock" style="display:none;"></div>
+      <div id="milestoneBlock" style="display:none;"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-content" id="mContent"></div>
+      <div class="modal-tags" id="mTags"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">🏛️ A Man Called <span id="navName"></span></a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Journal</a></li>
+    <li><a href="#" onclick="filterCat('Milestones',null);return false;">Milestones</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-label">Official Chronicle</div>
+    <h1>A Man Called<br><span class="outline" id="heroName"></span></h1>
+    <p class="hero-sub">News, policy recaps, developmental milestones &amp; fact-checks — straight from the presidency.</p>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<section class="featured-section">
+  <div id="featuredContainer"></div>
+</section>
+
+<!-- POSTS -->
+<section class="posts-section">
+  <div class="posts-header">
+    <div class="section-title">All Updates</div>
+    <div class="category-filters">
+      <button class="cat-btn active" onclick="filterCat('',this)">All</button>
+      <button class="cat-btn" onclick="filterCat('News',this)">News</button>
+      <button class="cat-btn" onclick="filterCat('Policy Recap',this)">Policy Recap</button>
+      <button class="cat-btn" onclick="filterCat('Milestones',this)">Milestones</button>
+      <button class="cat-btn" onclick="filterCat('Fact-Checker',this)">Fact-Checker</button>
+    </div>
+  </div>
+  <div class="search-row">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search updates, policies, claims…" oninput="onSearch(this.value)"/>
+  </div>
+  <div class="posts-grid" id="postsGrid"></div>
+  <div id="noPosts" style="display:none;text-align:center;padding:40px;color:var(--text-muted);">No posts match.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 A Man Called <span id="ftName"></span></span>
+  <span><a href="#">Privacy</a><a href="#">Contact</a></span>
+</footer>
+
+<script>
+  /* ============================================================
+     ONE PLACE TO CHANGE THE NAME.
+     Change CODENAME and it updates the title, nav, hero, footer,
+     and all fallback posts automatically.
+  ============================================================ */
+  const CODENAME = 'Lagbaja';
+
+  /* Your deployed Apps Script Web App URL (…/exec) */
+  const API_URL = 'PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE';
+
+  /* ---- apply codename to the page chrome ---- */
+  document.title = `A Man Called ${CODENAME} — The Presidential Chronicle`;
+  document.getElementById('navName').textContent = CODENAME;
+  document.getElementById('heroName').textContent = CODENAME + '.';
+  document.getElementById('ftName').textContent = CODENAME;
+
+  /* ---- fallback content (shows instantly; replaced by live data) ---- */
+  const FALLBACK_DATA = [
+    {
+      id:"policy-infra", title:"The Renewed Hope Infrastructure Plan", category:"Policy Recap",
+      excerpt:"How the administration intends to close Nigeria's infrastructure gap by 2030.",
+      body:"**Problem:** Nigeria's infrastructure deficit was estimated at $3 trillion.\n\n**Policy Action:** The Renewed Hope Infrastructure Plan mobilises ₦20 trillion in public-private partnerships for roads, rail, and energy.\n\n**Intended Outcome:** Raise GDP growth to 6% annually and create 5 million jobs.\n\n**Current Status (as of June 2026):** Three rail corridors under construction; Lagos-Calabar highway at 45% completion.",
+      image:"https://placehold.co/800x500/e2e0da/1a2a3a?text=Infrastructure+Plan",
+      date:"2026-05-15", author:"State House", tags:["Economy","Infrastructure"], featured:true
+    },
+    {
+      id:"news-port", title:`President ${CODENAME} commissions new Lekki Deep Sea Port phase`, category:"News",
+      excerpt:"The port adds 2.7 million TEUs to Nigeria's capacity, boosting exports.",
+      body:`In a ceremony attended by trade partners, President ${CODENAME} opened Phase 2 of the Lekki Deep Sea Port. The facility is expected to reduce port congestion by 40% and create 150,000 direct jobs.`,
+      image:"https://placehold.co/800x500/e2e0da/1a2a3a?text=Lekki+Port+Phase+2",
+      date:"2026-06-01", author:"Office of the President", tags:["Economy","Trade"], featured:false
+    },
+    {
+      id:"fact-wage", title:"Claim: Minimum wage doubled since 2024", category:"Fact-Checker",
+      excerpt:"A viral post claims the minimum wage has doubled. We checked the numbers.",
+      body:`**Claim:** "Under ${CODENAME}, the national minimum wage has doubled from ₦30,000 to ₦60,000."\n\n**Explanation:** The minimum wage was increased to ₦45,000 in April 2025, not ₦60,000. The ₦60,000 figure refers to a proposed living-wage bill still under review.`,
+      image:"https://placehold.co/800x500/e2e0da/1a2a3a?text=Fact+Check",
+      date:"2026-06-03", author:"Fact-Check Desk", tags:["Economy","Labour"], featured:false,
+      fact_verdict:"❌ False", fact_source:"Ministry of Labour & Employment",
+      fact_screenshot:"https://placehold.co/400x250/e2e0da/1a2a3a?text=Viral+Post"
+    },
+    {
+      id:"mile-highway", title:"Lagos-Calabar Coastal Highway — 70% complete", category:"Milestones",
+      excerpt:"The flagship highway has reached 70% completion, ahead of schedule.",
+      body:"The Lagos-Calabar Coastal Highway is a 700km project connecting major economic zones. As of June 2026, 490km have been completed.",
+      image:"https://placehold.co/800x500/e2e0da/1a2a3a?text=Coastal+Highway",
+      date:"2026-06-05", author:"Milestones Tracker", tags:["Infrastructure"], featured:false,
+      milestone_sector:"Infrastructure", milestone_date:"2026-06-01",
+      milestone_impact:"50,000 jobs, ₦1.2T economic activity",
+      milestone_progress:70, milestone_target:"Complete 700km by 2027"
+    }
+  ];
+
+  /* ---- state ---- */
+  let POSTS = sortByDate([...FALLBACK_DATA]);
+  let FEATURED = POSTS.find(p => p.featured) || POSTS[0] || null;
+  let ACTIVE_CAT = '';
+  let SEARCH_QUERY = '';
+  let CURRENT_POST = null;
+
+  function sortByDate(arr){ return arr.sort((a,b)=>(b.date||'').localeCompare(a.date||'')); }
+  function readingTime(body){ const w=(body||'').split(/\s+/).length; return Math.max(1,Math.round(w/200))+' min read'; }
+  function verdictClass(v){ if(!v) return 'verdict-false'; if(v.includes('True'))return 'verdict-true'; if(v.includes('Misleading'))return 'verdict-misleading'; return 'verdict-false'; }
+  function verdictIcon(v){ if(!v) return '❌'; if(v.includes('True'))return '✅'; if(v.includes('Misleading'))return '⚠️'; return '❌'; }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* ---- featured ---- */
+  function renderFeatured(){
+    const c = document.getElementById('featuredContainer');
+    if(!FEATURED){ c.innerHTML=''; return; }
+    const f = FEATURED;
+    c.innerHTML =
+      '<div class="featured-card" onclick="openModal(\''+f.id+'\')">'
+      +'<img class="featured-img" src="'+(f.image||'https://placehold.co/800x500/e2e0da/1a2a3a?text=Featured')+'" alt="'+esc(f.title)+'"/>'
+      +'<div class="featured-text">'
+      +'<div class="featured-eyebrow">Featured</div>'
+      +'<div class="featured-title">'+esc(f.title)+'</div>'
+      +'<div class="featured-excerpt">'+esc(f.excerpt)+'</div>'
+      +'<div class="featured-meta">'+esc(f.date)+' · '+esc(f.author)+'</div>'
+      +'<button class="btn-accent" onclick="event.stopPropagation();openModal(\''+f.id+'\')">Read →</button>'
+      +'</div></div>';
+  }
+
+  /* ---- grid ---- */
+  function currentList(){
+    let list = POSTS;
+    if(ACTIVE_CAT) list = list.filter(p=>p.category===ACTIVE_CAT);
+    if(SEARCH_QUERY){
+      const q = SEARCH_QUERY.toLowerCase();
+      list = list.filter(p =>
+        (p.title+' '+p.excerpt+' '+p.body+' '+(p.tags||[]).join(' ')+' '+p.category)
+        .toLowerCase().includes(q));
+    }
+    return list;
+  }
+
+  function renderPosts(){
+    const grid = document.getElementById('postsGrid');
+    const noPosts = document.getElementById('noPosts');
+    const list = currentList();
+    grid.innerHTML='';
+    if(!list.length){ noPosts.style.display='block'; return; }
+    noPosts.style.display='none';
+
+    list.forEach(post=>{
+      const card=document.createElement('div');
+      card.className='post-card';
+      card.onclick=()=>openModal(post.id);
+
+      let catHtml = esc(post.category);
+      if(post.category==='Fact-Checker' && post.fact_verdict){
+        catHtml += ' <span class="verdict-badge '+verdictClass(post.fact_verdict)+'">'+esc(post.fact_verdict)+'</span>';
+      }
+      let barHtml = '';
+      if(post.category==='Milestones' && post.milestone_progress){
+        barHtml = '<div class="pc-bar-track"><div class="pc-bar-fill" style="width:'+post.milestone_progress+'%"></div></div>';
+      }
+
+      card.innerHTML =
+        '<div class="pc-img">'+(post.image
+          ? '<img src="'+post.image+'" alt="'+esc(post.title)+'" loading="lazy" onerror="this.parentNode.innerHTML=\'<div style=&quot;width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px&quot;>No image</div>\'"/>'
+          : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;">No image</div>')+'</div>'
+        +'<div class="pc-body">'
+        +'<div class="pc-category">'+catHtml+'</div>'
+        +'<div class="pc-title">'+esc(post.title)+'</div>'
+        +'<div class="pc-excerpt">'+esc(post.excerpt)+'</div>'
+        + barHtml
+        +'<div class="pc-meta"><span>'+esc(post.date)+'</span><span>'+readingTime(post.body)+'</span></div>'
+        +'</div>';
+      grid.appendChild(card);
+    });
+  }
+
+  function filterCat(cat,btn){
+    ACTIVE_CAT=cat;
+    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+    if(btn){ btn.classList.add('active'); }
+    else { /* find matching button (e.g. nav link) */
+      document.querySelectorAll('.cat-btn').forEach(b=>{ if(b.textContent.trim()===(cat||'All')) b.classList.add('active'); });
+    }
+    renderPosts();
+  }
+
+  function onSearch(v){ SEARCH_QUERY=v.trim(); renderPosts(); }
+
+  /* ---- modal ---- */
+  function openModal(id){
+    const post = POSTS.find(p=>p.id===id);
+    if(!post) return;
+    CURRENT_POST = post;
+
+    document.getElementById('mImg').src = post.image || 'https://placehold.co/800x500/e2e0da/1a2a3a?text=Post';
+    document.getElementById('mCat').textContent = post.category;
+    document.getElementById('mTitle').textContent = post.title;
+    document.getElementById('mMetaText').textContent = post.date + ' · ' + post.author;
+    document.getElementById('mReadText').textContent = readingTime(post.body);
+
+    const shareBtn=document.getElementById('mShare');
+    shareBtn.className='modal-share-btn';
+    shareBtn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share';
+
+    /* FACT-CHECK block (column-driven, regex fallback for claim) */
+    const factBlock=document.getElementById('factCheckBlock');
+    factBlock.style.display='none';
+    if(post.category==='Fact-Checker' && post.fact_verdict){
+      factBlock.style.display='block';
+      let claim = post.fact_claim || '';
+      if(!claim){ const m = (post.body||'').match(/\*\*Claim:\*\*\s*(.*)/); claim = m ? m[1] : 'See full post.'; }
+      const shot = post.fact_screenshot ? '<img src="'+post.fact_screenshot+'" style="width:100%;max-width:400px;margin:10px 0;border-radius:4px;"/>' : '';
+      factBlock.innerHTML =
+        '<div class="fact-block">'
+        +'<div style="font-size:11px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">The Claim</div>'
+        +'<p style="font-size:15px;">'+esc(claim)+'</p>'+shot+'</div>'
+        +'<div class="fact-verdict-row"><span class="fact-verdict-icon">'+verdictIcon(post.fact_verdict)+'</span>'
+        +'<span class="fact-verdict-text">'+esc(post.fact_verdict)+'</span></div>'
+        +'<div class="fact-source">Source: '+esc(post.fact_source||'Official source')+'</div>';
+    }
+
+    /* MILESTONE block with progress bar */
+    const msBlock=document.getElementById('milestoneBlock');
+    msBlock.style.display='none';
+    if(post.category==='Milestones' && (post.milestone_progress || post.milestone_target)){
+      msBlock.style.display='block';
+      const prog = post.milestone_progress||0;
+      msBlock.innerHTML =
+        '<div class="ms-block">'
+        +'<div class="ms-row">'
+          +(post.milestone_sector?'<span>Sector: <strong>'+esc(post.milestone_sector)+'</strong></span>':'')
+          +(post.milestone_date?'<span>As of: <strong>'+esc(post.milestone_date)+'</strong></span>':'')
+        +'</div>'
+        +'<div class="ms-bar-track"><div class="ms-bar-fill" style="width:'+prog+'%"></div></div>'
+        +'<div class="ms-bar-labels"><strong>'+prog+'% complete</strong>'
+          +(post.milestone_target?'<span>'+esc(post.milestone_target)+'</span>':'')+'</div>'
+        +(post.milestone_impact?'<div class="ms-row" style="margin-top:10px;margin-bottom:0;"><span>Impact: <strong>'+esc(post.milestone_impact)+'</strong></span></div>':'')
+        +'</div>';
+    }
+
+    /* BODY parser: [IMG:url:caption], [CTA:url:Label], **bold**, *italic* */
+    const paras=(post.body||'').split(/\n\n/).filter(Boolean);
+    let html=paras.map(p=>{
+      let m=p.match(/^\[CTA:(https?:\/\/[^\]]+):([^\]]+)\]$/);
+      if(m) return '<div style="margin:8px 0 16px;"><a href="'+m[1]+'" target="_blank" rel="noopener" class="btn-accent">'+esc(m[2])+'</a></div>';
+      m=p.match(/^\[IMG:(https?:\/\/[^\s\]]+)(?::([^\]]*))?\]$/);
+      if(m){ const cap=m[2]?'<p style="font-size:11px;color:var(--text-muted);margin-top:6px;">'+esc(m[2])+'</p>':''; return '<div style="margin:16px 0;"><img src="'+m[1]+'" loading="lazy"/>'+cap+'</div>'; }
+      return '<p>'+esc(p).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>')+'</p>';
+    }).join('');
+    document.getElementById('mContent').innerHTML=html;
+
+    document.getElementById('mTags').innerHTML=(post.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('');
+
+    document.getElementById('postModal').classList.add('open');
+    document.getElementById('postModal').scrollTop=0;
+    document.body.style.overflow='hidden';
+    history.replaceState(null,'','#'+id);
+  }
+
+  function closeModal(){
+    document.getElementById('postModal').classList.remove('open');
+    document.body.style.overflow='';
+    CURRENT_POST=null;
+    history.replaceState(null,'',window.location.pathname);
+  }
+
+  function handleShare(){
+    if(!CURRENT_POST) return;
+    const url=window.location.origin+window.location.pathname+'#'+CURRENT_POST.id;
+    const btn=document.getElementById('mShare');
+    if(navigator.share){ navigator.share({title:CURRENT_POST.title,text:CURRENT_POST.excerpt,url}).catch(()=>{}); }
+    else{
+      navigator.clipboard.writeText(url).then(()=>{
+        btn.classList.add('copied'); btn.textContent='Copied!';
+        setTimeout(()=>{ btn.classList.remove('copied');
+          btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share';
+        },2000);
+      }).catch(()=>{});
+    }
+  }
+
+  document.getElementById('postModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+  /* ---- LIVE DATA via JSONP (no CORS, no CSV) ---- */
+  function loadLiveData(){
+    if(!API_URL || API_URL.indexOf('PASTE_YOUR')===0){ console.log('No API_URL set — using fallback.'); return; }
+    const cb='lagbaja_'+Date.now();
+    window[cb]=function(data){
+      delete window[cb];
+      if(Array.isArray(data) && data.length){
+        POSTS = sortByDate(data);
+        FEATURED = POSTS.find(p=>p.featured) || POSTS[0];
+        renderFeatured();
+        renderPosts();
+        const h=window.location.hash.replace('#','');
+        if(h) openModal(h);
+      }
+    };
+    const s=document.createElement('script');
+    s.src=API_URL+'?callback='+cb;
+    s.onerror=function(){ delete window[cb]; console.log('API unreachable — using fallback.'); };
+    document.body.appendChild(s);
+  }
+
+  /* ---- init ---- */
+  renderFeatured();
+  renderPosts();
+  loadLiveData();
+  (function(){ const h=window.location.hash.replace('#',''); if(h) openModal(h); })();
+</script>
+</body>
+</html>
